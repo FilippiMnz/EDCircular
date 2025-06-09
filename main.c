@@ -11,29 +11,26 @@ typedef struct no {
 } No;
 
 typedef struct{
-    No *inicio;
     No *fim;
     int tam;
 } ListaC;
 
 void Criar(ListaC *lista){
-    lista->inicio = NULL;
     lista->fim = NULL;
     lista->tam = 0;
 }
 void InserirInicio(ListaC *lista, const char* nome, const char* cpf){
     No *novoNo = malloc(sizeof(No));
 
-    if(novoNo ){
+    if(novoNo){
         strcpy(novoNo->nome, nome);
         strcpy(novoNo->CPF, cpf);
-        novoNo->proximo = lista->inicio;
-        lista->inicio = novoNo;
 
         if(lista->fim == NULL){
             lista->fim = novoNo;
+        }else{
+            novoNo->proximo = lista->fim->proximo;
         }
-        lista->fim->proximo = lista->inicio;
         lista->tam++;
     }
     else{
@@ -47,14 +44,13 @@ void InserirFim(ListaC *lista, const char* nome, const char* cpf){
     if(novoNo){
         strcpy(novoNo->nome, nome);
         strcpy(novoNo->CPF, cpf);
-        if(lista->inicio ==NULL){
-            lista->inicio = novoNo;
+        if(lista->fim ==NULL){
             lista->fim = novoNo;
-            lista->fim->proximo = lista->inicio;
+            novoNo->proximo = novoNo;
         }else{
+            novoNo->proximo = lista->fim->proximo;
             lista->fim->proximo = novoNo;
             lista->fim = novoNo;
-            lista->fim->proximo = lista->inicio;
         }
         lista->tam++;
     }
@@ -65,18 +61,18 @@ void InserirFim(ListaC *lista, const char* nome, const char* cpf){
 
 
 void ImprimirListaCircular(ListaC *lista){
-    if(lista->inicio ==NULL){
+    if(lista->fim ==NULL){
         printf("\nErro: Vazio");
         return;
     }
     
-    No *noAux = lista->inicio;
+    No *noAux = lista->fim->proximo;
     printf("\n\tLista tam %d: ", lista->tam);
     do{
         printf("Nome: %s || CPF: %s ->", noAux->nome, noAux->CPF);
         noAux = noAux->proximo;
 
-    }while(noAux != lista->inicio);
+    }while(noAux != lista->fim->proximo);
     
     printf("\n\n");
 }
