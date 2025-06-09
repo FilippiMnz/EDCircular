@@ -28,8 +28,10 @@ void InserirInicio(ListaC *lista, const char* nome, const char* cpf){
 
         if(lista->fim == NULL){
             lista->fim = novoNo;
+            novoNo->proximo = novoNo;
         }else{
             novoNo->proximo = lista->fim->proximo;
+            lista->fim->proximo = novoNo;
         }
         lista->tam++;
     }
