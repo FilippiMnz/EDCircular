@@ -41,6 +41,14 @@ void InserirInicio(ListaC *lista, const char* nome, const char* cpf){
 }
 
 void Sortear( ListaC *lista, int num){
+    //precisamos de um numero m <=nome
+    //m -1
+    //for(int i = 0; i < num-1; i++)
+    //contador = 0;
+    //contador sempre irá aumentar conforme o numero sorteado + caso anterior pegando a posição
+    //a cada ocorrencia, m--
+    //chama removerqualquer(&lista,m)
+    //quando lista->tam == 1 -> printf("Vencedor: %s, cpf: %s")// removerqualquer(&lista, m) free(lista); 
 
 }
 
@@ -134,7 +142,7 @@ int main(){
     scanf("%d", &tam);
 
     for(int i = 0; i < tam -1; i++){
-                
+         
     }
 
     return 0;
