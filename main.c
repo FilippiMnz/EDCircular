@@ -127,9 +127,15 @@ int main(){
     srand(time(NULL));
 
     int tam;
+    ListaC Lista;
+    Criar(&Lista);
 
-    printf("\nInsira o Tamanho da Lista");
+    printf("\nInsira a Quantidade de Participantes");
     scanf("%d", &tam);
+
+    for(int i = 0; i < tam -1; i++){
+                
+    }
 
     return 0;
 }
