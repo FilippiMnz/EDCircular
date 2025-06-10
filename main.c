@@ -154,7 +154,7 @@ int main(){
         printf("2- Listar Participantes Atuais\n");
         printf("3- REALIZAR SORTEIO \n");
         printf("4- Sair\n");
-        printf("5- Popular Lista");
+        printf("5- Popular Lista\n");
         printf("Escolha uma opcao: ");
         scanf("%d", &opcao);
 
