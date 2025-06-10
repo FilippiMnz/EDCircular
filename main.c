@@ -119,7 +119,7 @@ void sorteio(ListaC *lista) {
 
     No *remover = alvo->proximo;
 
-    printf("\nEliminado: %s)\n", remover->nome);
+    printf("\nEliminado: %s\n", remover->nome);
 
     alvo->proximo = remover->proximo;
     if (remover == lista->fim) {
