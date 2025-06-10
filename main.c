@@ -83,7 +83,7 @@ void ImprimirListaCircular(ListaC *lista){
     No *noAux = lista->fim->proximo;
     printf("\n\tLista tam %d: ", lista->tam);
     do{
-        printf("Nome: %s || CPF: %s ->", noAux->nome, noAux->CPF);
+        printf("Nome: %s || CPF: %s || ", noAux->nome, noAux->CPF);
         noAux = noAux->proximo;
     } while(noAux != lista->fim->proximo);
 
