@@ -3,14 +3,13 @@
 #include <stdlib.h>
 #include <time.h>
 
-
 typedef struct no {
     char nome[50];
     char CPF[15];
     struct no *proximo;
 } No;
 
-typedef struct{
+typedef struct {
     No *fim;
     int tam;
 } ListaC;
@@ -19,55 +18,51 @@ void Criar(ListaC *lista){
     lista->fim = NULL;
     lista->tam = 0;
 }
-void InserirInicio(ListaC *lista, const char* nome, const char* cpf){
+
+void InserirFim(ListaC *lista, const char* nome, const char* cpf){
     No *novoNo = malloc(sizeof(No));
 
     if(novoNo){
         strcpy(novoNo->nome, nome);
         strcpy(novoNo->CPF, cpf);
-
         if(lista->fim == NULL){
             lista->fim = novoNo;
             novoNo->proximo = novoNo;
-        }else{
+        } else {
             novoNo->proximo = lista->fim->proximo;
             lista->fim->proximo = novoNo;
+            lista->fim = novoNo;
         }
         lista->tam++;
-    }
-    else{
+    } else {
         printf("\nErro de alocacao");
     }
 }
 
-void Sortear( ListaC *lista, int num){
-    //precisamos de um numero m <=nome
-    //m -1
-    //for(int i = 0; i < num-1; i++)
-    //contador = 0;
-    //contador sempre irá aumentar conforme o numero sorteado + caso anterior pegando a posição
-    //a cada ocorrencia, m--
-    //chama removerqualquer(&lista,m)
-    //quando lista->tam == 1 -> printf("Vencedor: %s, cpf: %s")// removerqualquer(&lista, m) free(lista); 
-
+No* BuscarElementoIndice(ListaC *lista, int N){
+    if(lista->fim == NULL){
+        printf("\nVazio");
+        return NULL;
+    }
+    No *aux = lista->fim->proximo;
+    for(int i = 0; i < N; i++){
+        aux = aux->proximo;
+    }
+    return aux;
 }
 
 void removerQualquer(ListaC *lista, int N){
-    if(lista->fim ==NULL || N < 0 || N >= lista->tam){
+    if(lista->fim == NULL || N < 0 || N >= lista->tam){
         printf("\nVazio");
         return;
     }
     No *remover = NULL;
+
     if(lista->tam == 1){
         remover = lista->fim;
         lista->fim = NULL;
-    }else{
-        No *anterior;
-        if(N == 0){
-            anterior = lista->fim;
-        }else{
-            anterior = BuscarElementoIndice(lista, N - 1);
-        }
+    } else {
+        No *anterior = BuscarElementoIndice(lista, (N + lista->tam - 1) % lista->tam);
         remover = anterior->proximo;
         anterior->proximo = remover->proximo;
         if(remover == lista->fim){
@@ -79,71 +74,84 @@ void removerQualquer(ListaC *lista, int N){
     lista->tam--;
 }
 
-void BuscarElementoIndice(ListaC *lista, int N){
-    if(lista->fim ==NULL){
-        printf("\nVazio");
-        return;
-    }
-    No *aux = lista->fim->proximo;
-    for(int i = 0; i < N; i++){
-        aux = aux->proximo;
-    }
-    return aux;
-}
-
-void InserirFim(ListaC *lista, const char* nome, const char* cpf){
-    No *aux, *novoNo = malloc(sizeof(No));
-
-    if(novoNo){
-        strcpy(novoNo->nome, nome);
-        strcpy(novoNo->CPF, cpf);
-        if(lista->fim ==NULL){
-            lista->fim = novoNo;
-            novoNo->proximo = novoNo;
-        }else{
-            novoNo->proximo = lista->fim->proximo;
-            lista->fim->proximo = novoNo;
-            lista->fim = novoNo;
-        }
-        lista->tam++;
-    }
-    else{
-        printf("\nErro de alocacao");
-    }
-}
-
-
 void ImprimirListaCircular(ListaC *lista){
-    if(lista->fim ==NULL){
+    if(lista->fim == NULL){
         printf("\nErro: Vazio");
         return;
     }
-    
+
     No *noAux = lista->fim->proximo;
     printf("\n\tLista tam %d: ", lista->tam);
     do{
         printf("Nome: %s || CPF: %s ->", noAux->nome, noAux->CPF);
         noAux = noAux->proximo;
+    } while(noAux != lista->fim->proximo);
 
-    }while(noAux != lista->fim->proximo);
-    
     printf("\n\n");
 }
 
-
-int main(){ 
-    srand(time(NULL));
-
-    int tam;
-    ListaC Lista;
-    Criar(&Lista);
-
-    printf("\nInsira a Quantidade de Participantes");
-    scanf("%d", &tam);
-
-    for(int i = 0; i < tam -1; i++){
-         
+void Liberar(ListaC *lista){
+    while(lista->tam > 0){
+        removerQualquer(lista, 0);
     }
+    printf("Lista Finalizada");
+}
+
+void Sortear(ListaC *lista){
+    if(lista->tam <= 1){
+        printf("\nParticipantes Insuficientes\n");
+        return;
+    }
+    int sorteado = rand() % lista->tam;
+    printf("\nNumero sorteado: %d \n", sorteado);
+    removerQualquer(lista, sorteado);
+    ImprimirListaCircular(lista);
+    if(lista->tam == 1){
+        printf("Temos um vencedor: %s || CPF: %s", lista->fim->nome, lista->fim->CPF);
+    }
+}
+
+int main(){
+    srand(time(NULL));
+    int opcao;
+    char nome[50];
+    char cpf[15];
+    ListaC lista;
+    Criar(&lista);
+
+    do {
+        printf("1- Adicionar Participante\n");
+        printf("2- Listar Participantes Atuais\n");
+        printf("3- REALIZAR SORTEIO \n");
+        printf("4- Sair\n");
+        printf("Escolha uma opcao: ");
+        scanf("%d", &opcao);
+
+        switch(opcao) {
+            case 1:
+                printf("\nDigite o nome: ");
+                scanf(" %49[^\n]", nome);
+                printf("Digite o CPF: ");
+                scanf("%14s", cpf);
+                InserirFim(&lista, nome, cpf);
+                break;
+            case 2:
+                ImprimirListaCircular(&lista);
+                break;
+            case 3:
+                Sortear(&lista);
+                break;
+            case 4:
+                if(lista.tam > 0) {
+                   Liberar(&lista);
+                } else {
+                   printf("\nGoodbyeee\n");
+                }
+                break;
+            default:
+                printf("\ninvalido\n");
+        }
+    } while(opcao != 4);
 
     return 0;
 }
