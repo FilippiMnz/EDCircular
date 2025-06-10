@@ -111,6 +111,34 @@ void Sortear(ListaC *lista){
     }
 }
 
+void realizarSorteioPorContagem(ListaC *lista){
+    static No *pontoDePartida = NULL;
+
+    if(pontoDePartida == NULL || pontoDePartida->proximo == NULL || lista->tam == 0) {
+        pontoDePartida = lista->fim;
+    }
+
+    int m = (rand() % lista->tam) + 1;
+
+    printf("\nO numero Sorteado foi: %d ", m);
+    printf("\nContagem Começando em: %s\n", pontoDePartida->proximo->nome);
+
+    for(int i = 0; i < m - 1; i++){
+        pontoDePartida = pontoDePartida->proximo;
+    }
+
+    No *remover = pontoDePartida->proximo;
+
+    printf("Participante eliminado: %s (CPF: %s)\n", remover->nome, remover->CPF);
+
+    pontoDePartida->proximo = remover->proximo;
+    if(remover == lista->fim){
+        lista->fim = pontoDePartida;
+    }
+    free(remover);
+    lista->tam--;
+}
+
 int main(){
     srand(time(NULL));
     int opcao;
