@@ -97,46 +97,48 @@ void Liberar(ListaC *lista){
     printf("Lista Finalizada");
 }
 
-void Sortear(ListaC *lista){
-    if(lista->tam <= 1){
-        printf("\nParticipantes Insuficientes\n");
+void sorteio(ListaC *lista) {
+    static No *alvo = NULL;
+
+    if (lista->tam == 0) {
+        printf("\nLista Vazia\n");
         return;
     }
-    int sorteado = rand() % lista->tam;
-    printf("\nNumero sorteado: %d \n", sorteado);
-    removerQualquer(lista, sorteado);
-    ImprimirListaCircular(lista);
-    if(lista->tam == 1){
-        printf("Temos um vencedor: %s || CPF: %s", lista->fim->nome, lista->fim->CPF);
-    }
-}
-
-void realizarSorteioPorContagem(ListaC *lista){
-    static No *pontoDePartida = NULL;
-
-    if(pontoDePartida == NULL || pontoDePartida->proximo == NULL || lista->tam == 0) {
-        pontoDePartida = lista->fim;
+    if (alvo == NULL || alvo->proximo == NULL) {
+        alvo = lista->fim;
     }
 
     int m = (rand() % lista->tam) + 1;
 
-    printf("\nO numero Sorteado foi: %d ", m);
-    printf("\nContagem Começando em: %s\n", pontoDePartida->proximo->nome);
+    printf("\nNúmero sorteado: %d\n", m);
+    printf("\nContagem começando por: %s\n", alvo->proximo->nome);
 
-    for(int i = 0; i < m - 1; i++){
-        pontoDePartida = pontoDePartida->proximo;
+    for (int i = 0; i < m - 1; i++) {
+        alvo = alvo->proximo;
     }
 
-    No *remover = pontoDePartida->proximo;
+    No *remover = alvo->proximo;
 
-    printf("Participante eliminado: %s (CPF: %s)\n", remover->nome, remover->CPF);
+    printf("\nEliminado: %s)\n", remover->nome);
 
-    pontoDePartida->proximo = remover->proximo;
-    if(remover == lista->fim){
-        lista->fim = pontoDePartida;
+    alvo->proximo = remover->proximo;
+    if (remover == lista->fim) {
+        lista->fim = alvo;
     }
+
     free(remover);
     lista->tam--;
+
+    ImprimirListaCircular(lista);
+
+    if (lista->tam == 1) {
+        printf("\nTemos um VENCEDOR!\n");
+        printf("Nome: %s || CPF: %s\n", lista->fim->nome, lista->fim->CPF);
+        free(lista->fim);
+        lista->fim = NULL;
+        lista->tam = 0;
+        alvo = NULL;
+    }
 }
 
 int main(){
@@ -167,7 +169,7 @@ int main(){
                 ImprimirListaCircular(&lista);
                 break;
             case 3:
-                Sortear(&lista);
+                sorteio(&lista);
                 break;
             case 4:
                 if(lista.tam > 0) {
