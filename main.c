@@ -154,6 +154,7 @@ int main(){
         printf("2- Listar Participantes Atuais\n");
         printf("3- REALIZAR SORTEIO \n");
         printf("4- Sair\n");
+        printf("5- Popular Lista");
         printf("Escolha uma opcao: ");
         scanf("%d", &opcao);
 
@@ -178,6 +179,13 @@ int main(){
                    printf("\nGoodbyeee\n");
                 }
                 break;
+            case 5:
+                printf("Populando Lista");
+                InserirFim(&lista, "ED", "369.872.530-48");
+                InserirFim(&lista, "AL", "633.983.740-93");
+                InserirFim(&lista, "MUSTANG", "566.329.180-69");
+                InserirFim(&lista, "GREED", "069.033.260-22");
+                InserirFim(&lista, "HUGHES", "432.678.030-47");
             default:
                 printf("\ninvalido\n");
         }
